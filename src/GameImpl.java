@@ -52,7 +52,7 @@ public class GameImpl extends Pane implements Game {
 		ball = new Ball();
 		getChildren().add(ball.getCircle());  // Add the ball to the game board
 
-		// Create and add animals ...
+		// Create animals
         tiles = new ArrayList<Tile>();
         for (int i = 0; i < 16; i++) {
 
@@ -66,7 +66,13 @@ public class GameImpl extends Pane implements Game {
             else if (i % 2 == 0) animal = "goat.jpg";
             else animal = "horse.jpg";
 
-            ArrayList.add(new Tile( //TODO)
+            ArrayList.add(new Tile(animal, x, y));
+        }
+
+        // Add animals to board
+        for (Tile tile : tiles) {
+            getChildren().add(tile.getImage());
+        }
 
 		// Create and add paddle
 		paddle = new Paddle();
