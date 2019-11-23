@@ -105,6 +105,7 @@ public class GameImpl extends Pane implements Game {
 		});
 
 		// Add another event handler to steer paddle...
+		
 	}
 
 	/**

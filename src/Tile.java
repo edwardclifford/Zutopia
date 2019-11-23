@@ -1,12 +1,8 @@
 import java.awt.*;
 import java.io.FileInputStream; 
 import java.io.FileNotFoundException; 
-import javafx.application.Application; 
-import javafx.scene.Group; 
-import javafx.scene.Scene; 
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;  
-import javafx.stage.Stage;  
 
 
 /**
@@ -42,9 +38,10 @@ public class Tile implements GameObject {
 	}
 	/**
 	 * gets the image from path
+	 * @return 
 	 * @throws FileNotFoundException 
 	 */
-	public void getImage () throws FileNotFoundException {
+	public Image getImage () throws FileNotFoundException {
 		//Creating an image 
 		Image image = new Image(new FileInputStream(URL_IMG));  
 
@@ -58,6 +55,7 @@ public class Tile implements GameObject {
 		//setting the fit height and width of the image view 
 		imageView.setFitHeight(IMG_HEIGHT); 
 		imageView.setFitWidth(IMG_WIDTH); 
+		return image;
 	}
 
 	/**
