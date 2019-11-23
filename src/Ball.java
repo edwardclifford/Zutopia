@@ -5,7 +5,7 @@ import javafx.scene.shape.Circle;
 /**
  * Class that implements a ball with a position and velocity.
  */
-public class Ball {
+public class Ball implements GameObject {
 	// Constants
 	/**
 	 * The radius of the ball.
@@ -63,4 +63,39 @@ public class Ball {
 		circle.setTranslateX(x - (circle.getLayoutX() + BALL_RADIUS));
 		circle.setTranslateY(y - (circle.getLayoutY() + BALL_RADIUS));
 	}
+
+    /**
+     * Return the y value of the top of the ball
+     * @return the y value of the top of the ball
+     */
+    public int getTop () {
+        return y - BALL_RADIUS;
+    }
+
+    /**
+     * Return the x value of the right of the ball
+     * @return the x value of the right of the ball
+     */
+    public int getRight () {
+        return x + BALL_RADIUS;
+    }
+
+    /**
+     * Return the y value of the bottom of the ball
+     * @return the y value of the bottom of the ball
+     */
+    public int getBottom () {
+        return y + BALL_RADIUS;
+    }
+
+    /**
+     * Return the x value of the left of the ball
+     * @return the x value of the left of the ball
+     */
+    public int getLeft () {
+        return x + BALL_RADIUS;
+    }
+
+
+
 }

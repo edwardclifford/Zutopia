@@ -2,7 +2,7 @@ import java.awt.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 
-class Paddle {
+class Paddle implements GameObject{
 	// Constants
 	/**
 	 * The width of the paddle.
@@ -87,4 +87,36 @@ class Paddle {
 		rectangle.setTranslateX(newX - (rectangle.getLayoutX() + PADDLE_WIDTH/2));
 		rectangle.setTranslateY(newY - (rectangle.getLayoutY() + PADDLE_HEIGHT/2));
 	}
+
+    /**
+     * Returns the y value of the top of the hitbox
+     * @return the y value of the top edge of the paddle
+     */
+    public int getTop() {
+        return rectangle.getLayoutY() + rectangle.getTranslateY(); 
+    }
+     
+    /**
+     * Returns the x value of the right of the hitbox
+     * @return the x value of the right edge of the paddle
+     */
+    public int getRight() {
+        return rectangle.getLayoutX() + rectangle.getTranslateX() + PADDLE_WIDTH; 
+    }   
+
+    /**
+     * Returns the y value of the bottom of the hitbox
+     * @return the y value of the bottom edge of the paddle
+     */
+    public int getBottom() {
+        return rectangle.getLayoutY() + rectangle.getTranslateY() + PADDLE_HEIGHT; 
+    }   
+
+    /**
+     * Returns the x value of the left of the hitbox
+     * @return the x value of the left edge of the paddle
+     */
+    public int getLeft() {
+        return rectangle.getLayoutX() + rectangle.getTranslateX(); 
+    }
 }
