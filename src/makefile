@@ -13,6 +13,8 @@ CLASSES = \
 		  GameApp.java \
 		  GameImpl.java \
 		  Paddle.java \
+		  Tile.java \
+		  GameObject.java \
 
 MAIN = GameApp
 
