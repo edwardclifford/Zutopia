@@ -68,7 +68,7 @@ public class Ball implements GameObject {
      * Return the y value of the top of the ball
      * @return the y value of the top of the ball
      */
-    public int getTop () {
+    public double getTop () {
         return y - BALL_RADIUS;
     }
 
@@ -76,7 +76,7 @@ public class Ball implements GameObject {
      * Return the x value of the right of the ball
      * @return the x value of the right of the ball
      */
-    public int getRight () {
+    public double getRight () {
         return x + BALL_RADIUS;
     }
 
@@ -84,7 +84,7 @@ public class Ball implements GameObject {
      * Return the y value of the bottom of the ball
      * @return the y value of the bottom of the ball
      */
-    public int getBottom () {
+    public double getBottom () {
         return y + BALL_RADIUS;
     }
 
@@ -92,10 +92,7 @@ public class Ball implements GameObject {
      * Return the x value of the left of the ball
      * @return the x value of the left of the ball
      */
-    public int getLeft () {
+    public double getLeft () {
         return x + BALL_RADIUS;
     }
-
-
-
 }

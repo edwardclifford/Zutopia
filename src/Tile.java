@@ -63,31 +63,31 @@ public class Tile implements GameObject {
 	/**
 	 * this function gets the top Y value
 	 */
-	public int getTop () {
-		return (int) (CENTER_Y - (0.5 * IMG_HEIGHT));
+	public double getTop () {
+		return (CENTER_Y - (0.5 * IMG_HEIGHT));
 		
 	}
 	
 	/**
 	 * This function gets the bottom Y value
 	 */
-	public int getBottom () {
-		return  (int) (CENTER_Y + (0.5 * IMG_HEIGHT));
+	public double getBottom () {
+		return  (CENTER_Y + (0.5 * IMG_HEIGHT));
 	}
 	
 	/**
 	 * This function gets the left X value
 	 */
-	public int getLeft () {
-		return  (int) (CENTER_X - (0.5 * IMG_WIDTH));
+	public double getLeft () {
+		return  (CENTER_X - (0.5 * IMG_WIDTH));
 		
 	}
 	
 	/**
 	 * This function gets the right x value
 	 */
-	public int getRight () {
-		return  (int) (CENTER_X + (0.5 * IMG_WIDTH));
+	public double getRight () {
+		return  (CENTER_X + (0.5 * IMG_WIDTH));
 		
 	}	
 	
