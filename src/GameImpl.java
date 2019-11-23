@@ -26,6 +26,7 @@ public class GameImpl extends Pane implements Game {
 	// Instance variables
 	private Ball ball;
 	private Paddle paddle;
+    private List<Tile> tiles;
 
 	/**
 	 * Constructs a new GameImpl.
@@ -52,6 +53,20 @@ public class GameImpl extends Pane implements Game {
 		getChildren().add(ball.getCircle());  // Add the ball to the game board
 
 		// Create and add animals ...
+        tiles = new ArrayList<Tile>();
+        for (int i = 0; i < 16; i++) {
+
+            // Get an (x, y) for each value of i 
+            int x = WIDTH / 8 + (i / 4) * (WIDTH / 4);
+            int y = (HEIGHT / 8 + (i % 4) * (HEIGHT / 4)) / 2;
+
+            // Alternate between all 3 animals
+            String animal;
+            if (i % 3 == 0) animal = "duck.jpg";
+            else if (i % 2 == 0) animal = "goat.jpg";
+            else animal = "horse.jpg";
+
+            ArrayList.add(new Tile( //TODO)
 
 		// Create and add paddle
 		paddle = new Paddle();
