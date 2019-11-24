@@ -18,7 +18,7 @@ public class Ball implements GameObject {
 	/**
 	 * The initial velocity of the ball in the y direction.
 	 */
-	public static final double INITIAL_VY = -1e-7;
+	public static final double INITIAL_VY = 1e-7;
 
 	// Instance variables
 	// (x,y) is the position of the center of the ball.

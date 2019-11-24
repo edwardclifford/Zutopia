@@ -74,6 +74,15 @@ public class Tile implements GameObject {
         return new Image(new FileInputStream(URL_IMG));
     }
 
+    /**
+     * Checks if a point exists inside the bounds of the tile
+     * @param x the x value of the point being checked
+     * @param y the y value of the point being checked
+     */
+    public boolean contains(double x, double y) {
+        return (x >= getLeft() && x <= getRight() &&
+                y >= getTop() && y <= getBottom());
+    }
 	/**
 	 * this function gets the top Y value
 	 */
