@@ -170,13 +170,9 @@ public class GameImpl extends Pane implements Game {
 	}
 
     public void tileCollisions (long deltaNanoTime) {
-        final double currentBallX = ball.x;  
-        final double currentBallY = ball.y;
         final double[] nextBall = ball.getNextPosition(deltaNanoTime);
         final double nextBallX = nextBall[0];
         final double nextBallY = nextBall[1];
-        final double speedIncreaseX = ball.INITIAL_VX / 5;
-        final double speedIncreaseY = ball.INITIAL_VY / 5;
 
         for (int i = 0; i < tiles.size(); i++) {
             Tile tile = tiles.get(i);
@@ -188,60 +184,6 @@ public class GameImpl extends Pane implements Game {
                 tiles.remove(i);
                 return;
             }
-            /*
-            //https://www.geeksforgeeks.org/check-if-two-given-line-segments-intersect/
-            // Check for left bounds
-            if (ball.vx > 0) {
-                if (doesIntersect(currentBallX + ball.BALL_RADIUS, currentBallY, 
-                        nextBallX + ball.BALL_RADIUS, nextBallY, 
-                        tile.getLeft(), tile.getTop() - 1, tile.getLeft(), tile.getBottom() + 1)) {
-                            // Left edge collision, flip ball vx
-                            System.out.println("Left col");
-                            ball.vx = -1 * (Math.abs(ball.vx) + speedIncreaseX); 
-                            getChildren().remove(tile.getImageView());
-                            tiles.remove(i);
-                            return;
-                }
-            }
-            // Check for right bounds
-            else {
-                if (doesIntersect(currentBallX - ball.BALL_RADIUS, currentBallY, 
-                        nextBallX - ball.BALL_RADIUS, nextBallY, 
-                        tile.getRight(), tile.getTop() - 1, tile.getRight(), tile.getBottom() + 1)) {
-                            // Right edge collision, flip ball vx
-                            System.out.println("Right col");
-                            ball.vx = Math.abs(ball.vx) + speedIncreaseX; 
-                            getChildren().remove(tile.getImageView());
-                            tiles.remove(i);
-                            return;
-                }
-            }
-            // Check for top bounds
-            if (ball.vy > 0) {
-                if (doesIntersect(currentBallX, currentBallY + ball.BALL_RADIUS, 
-                        nextBallX, nextBallY + ball.BALL_RADIUS, 
-                        tile.getRight() + 1, tile.getTop(), tile.getLeft() - 1, tile.getTop())) {
-                            // Top edge collision, flip ball vy
-                            System.out.println("Top col");
-                            ball.vy = -1 * (Math.abs(ball.vy) + speedIncreaseY); 
-                            getChildren().remove(tile.getImageView());
-                            tiles.remove(i);
-                            return;
-                }
-            }
-            else {
-                if (doesIntersect(currentBallX, currentBallY - ball.BALL_RADIUS,
-                        nextBallX, nextBallY - ball.BALL_RADIUS, 
-                        tile.getRight() + 1, tile.getBottom(), tile.getLeft() - 1, tile.getBottom())) {
-                            // Bottom edge collision, flip ball vy
-                            System.out.println("Bottom col");
-                            ball.vy = Math.abs(ball.vy) + speedIncreaseY; 
-                            getChildren().remove(tile.getImageView());
-                            tiles.remove(i);
-                            return;
-                }
-            }
-            */
         }
     }
 
