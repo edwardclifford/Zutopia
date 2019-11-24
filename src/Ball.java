@@ -18,12 +18,12 @@ public class Ball implements GameObject {
 	/**
 	 * The initial velocity of the ball in the y direction.
 	 */
-	public static final double INITIAL_VY = 1e-7;
+	public static final double INITIAL_VY = -1e-7;
 
 	// Instance variables
 	// (x,y) is the position of the center of the ball.
-	private double x, y;
-	private double vx, vy;
+	public double x, y;
+	public double vx, vy;
 	private Circle circle;
 
 	/**
@@ -63,6 +63,18 @@ public class Ball implements GameObject {
 		circle.setTranslateX(x - (circle.getLayoutX() + BALL_RADIUS));
 		circle.setTranslateY(y - (circle.getLayoutY() + BALL_RADIUS));
 	}
+
+    /**
+     * Calculates the next x, y position for a given unit of time and its current velocity.
+     * @param deltaNanoTime the number of nanoseconds that have transpired since the last update
+     * @return an array of 2 length containing the x pos in the 0th element and the y pos in the 1st element
+     */
+    public double[] getNextPosition (long deltaNanoTime) {
+        double dx = vx * deltaNanoTime;
+        double dy = vy * deltaNanoTime;
+        
+        return new double[] { dx + x, dy + y };
+    }
 
     /**
      * Return the y value of the top of the ball

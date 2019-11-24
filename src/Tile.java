@@ -19,76 +19,87 @@ public class Tile implements GameObject {
 	/**
 	 * The width of the image
 	 */
-	public static final int IMG_WIDTH = 24;
+	public static final int IMG_WIDTH = 40;
 	/**
 	 * The height of the image.
 	 */
-	public static final int IMG_HEIGHT = 24;
+	public static final int IMG_HEIGHT = 40;
 	/**
-	 * The position of center of the image.
+	 * The position of the image y.
 	 */
-	public static double CENTER_Y = 0;
+	public double posY = 0;
 	/**
-	 * The of center of the image X.
+	 * The position of the image X.
 	 */
-	public static double CENTER_X = 0;
-	
-	public static String URL_IMG = "";
+	public double posX = 0;
+    /**
+     * The location of the image file
+     */
+	public String URL_IMG = "";
 
+    public ImageView imageView;
+    /**
+     * Impliments a tile class
+     */ 
 	Tile(String url, int centerX, int centerY) {
 		URL_IMG = url;
-		CENTER_X = centerX;
-		CENTER_Y = centerY;
+		posX = centerX;
+		posY = centerY;
+        try {
+            Image image = openImage();
+            imageView = new ImageView(image); 
+
+            //Setting the position of the image 
+            imageView.setX(posX - (IMG_WIDTH / 2));
+            imageView.setY(posY - (IMG_HEIGHT /2)); 
+
+            //setting the fit height and width of the image view 
+            imageView.setFitHeight(IMG_HEIGHT); 
+            imageView.setFitWidth(IMG_WIDTH); 
+        }
+        catch (FileNotFoundException e) {
+            System.out.println(URL_IMG + " not found");
+        }
 	}
 	/**
 	 * gets the image from path
-	 * @throws FileNotFoundException 
+     * @return the imageview
 	 */
-	public void getImage () throws FileNotFoundException {
+	public ImageView getImageView () {
 		//Creating an image 
-		Image image = new Image(new FileInputStream(URL_IMG));  
-
-		//Setting the image view 
-		ImageView imageView = new ImageView(image); 
-
-		//Setting the position of the image 
-		imageView.setX(CENTER_X);
-		imageView.setY(CENTER_Y); 
-
-		//setting the fit height and width of the image view 
-		imageView.setFitHeight(IMG_HEIGHT); 
-		imageView.setFitWidth(IMG_WIDTH); 
+        return imageView; 
 	}
+
+    public Image openImage () throws FileNotFoundException {
+        return new Image(new FileInputStream(URL_IMG));
+    }
 
 	/**
 	 * this function gets the top Y value
 	 */
 	public double getTop () {
-		return (CENTER_Y - (0.5 * IMG_HEIGHT));
-		
+		return posY - (IMG_HEIGHT / 2);
 	}
 	
 	/**
 	 * This function gets the bottom Y value
 	 */
 	public double getBottom () {
-		return  (CENTER_Y + (0.5 * IMG_HEIGHT));
+		return posY + (IMG_HEIGHT / 2);
 	}
 	
 	/**
 	 * This function gets the left X value
 	 */
 	public double getLeft () {
-		return  (CENTER_X - (0.5 * IMG_WIDTH));
-		
+		return posX - (IMG_WIDTH / 2);
 	}
 	
 	/**
 	 * This function gets the right x value
 	 */
 	public double getRight () {
-		return  (CENTER_X + (0.5 * IMG_WIDTH));
-		
+		return posX + (IMG_WIDTH / 2);
 	}	
 	
 }
