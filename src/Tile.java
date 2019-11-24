@@ -11,8 +11,6 @@ import javafx.stage.Stage;
 
 /**
  * This class create a tile object
- * @author Gabi
- *
  */
 
 public class Tile implements GameObject {
@@ -70,6 +68,9 @@ public class Tile implements GameObject {
         return imageView; 
 	}
 
+    /**
+     * Opens the image url
+     */
     public Image openImage () throws FileNotFoundException {
         return new Image(new FileInputStream(URL_IMG));
     }
@@ -83,6 +84,7 @@ public class Tile implements GameObject {
         return (x >= getLeft() && x <= getRight() &&
                 y >= getTop() && y <= getBottom());
     }
+
 	/**
 	 * this function gets the top Y value
 	 */

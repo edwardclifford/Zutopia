@@ -25,10 +25,11 @@ public class GameImpl extends Pane implements Game {
 	public static final int HEIGHT = 600;
 
 	// Instance variables
-	private Ball ball;
-	private Paddle paddle;
-    private List<Tile> tiles;
-    private int bottomCollisions = 0;
+	private Ball _ball;
+	private Paddle _paddle;
+    private List<Tile> _tiles;
+    private int _bottomCollisions = 0;
+
 	/**
 	 * Constructs a new GameImpl.
 	 */
@@ -46,12 +47,30 @@ public class GameImpl extends Pane implements Game {
 		return this;
 	}
 
+    /**
+     * Resets the game state with new animals and score.
+     * @param state the state of the game
+     */
 	private void restartGame (GameState state) {
 		getChildren().clear();  // remove all components from the game
-        bottomCollisions = 0;
+        _bottomCollisions = 0;
 
+		// Add start message
+		final String message;
+		if (state == GameState.LOST) {
+			message = "Game Over, you got " + (16 - _tiles.size()) + " animals.\n";
+		} else if (state == GameState.WON) {
+			message = "You won!\n";
+		} else {
+			message = "";
+		}
+		final Label startLabel = new Label(message + "Click mouse to start");
+		startLabel.setLayoutX(WIDTH / 2 - 50);
+		startLabel.setLayoutY(HEIGHT / 2 + 100);
+		getChildren().add(startLabel);
+        
 		// Create animals
-        tiles = new ArrayList<Tile>();
+        _tiles = new ArrayList<Tile>();
         for (int i = 0; i < 16; i++) {
 
             // Get an (x, y) for each value of i 
@@ -66,31 +85,17 @@ public class GameImpl extends Pane implements Game {
             
             // Add new tiles to list and display them on screen 
             Tile tile = new Tile(animal, x, y);
-            tiles.add(tile);
+            _tiles.add(tile);
             getChildren().add(tile.getImageView());
         }
 
 		// Create and add ball
-		ball = new Ball();
-		getChildren().add(ball.getCircle());  // Add the ball to the game board
+		_ball = new Ball();
+		getChildren().add(_ball.getCircle());  // Add the ball to the game board
 
 		// Create and add paddle
-		paddle = new Paddle();
-		getChildren().add(paddle.getRectangle());  // Add the paddle to the game board
-
-		// Add start message
-		final String message;
-		if (state == GameState.LOST) {
-			message = "Game Over\n";
-		} else if (state == GameState.WON) {
-			message = "You won!\n";
-		} else {
-			message = "";
-		}
-		final Label startLabel = new Label(message + "Click mouse to start");
-		startLabel.setLayoutX(WIDTH / 2 - 50);
-		startLabel.setLayoutY(HEIGHT / 2 + 100);
-		getChildren().add(startLabel);
+		_paddle = new Paddle();
+		getChildren().add(_paddle.getRectangle());  // Add the paddle to the game board
 
 		// Add event handler to start the game
 		setOnMouseClicked(new EventHandler<MouseEvent> () {
@@ -108,12 +113,10 @@ public class GameImpl extends Pane implements Game {
         setOnMouseMoved(new EventHandler<MouseEvent> () {
 			@Override
 			public void handle (MouseEvent e) {
-                paddle.moveTo(e.getX(), e.getY());
+                _paddle.moveTo(e.getX(), e.getY());
             }
 		});
-
-
-	}
+    }
 
 	/**
 	 * Begins the game-play by creating and starting an AnimationTimer.
@@ -146,95 +149,112 @@ public class GameImpl extends Pane implements Game {
 	 * @return the current game state
 	 */
 	public GameState runOneTimestep (long deltaNanoTime) {
+        // Track paddle to mouse
         setOnMouseMoved(new EventHandler<MouseEvent> () {
 			@Override
 			public void handle (MouseEvent e) {
-                paddle.moveTo(e.getX(), e.getY());
+                _paddle.moveTo(e.getX(), e.getY());
             }
 		});
 
+        // Helper functions to check for collisions
         tileCollisions(deltaNanoTime); 
-        wallCollisions(deltaNanoTime);
+        wallCollisions();
         paddleCollisions(deltaNanoTime);
 
-		ball.updatePosition(deltaNanoTime);
-
-        if (tiles.size() == 0) {
+        // Check win conditions
+        if (_tiles.size() == 0) {
             return GameState.WON;
         }
 
-        if (bottomCollisions == 5) {
+        if (_bottomCollisions == 5) {
             return GameState.LOST;
         }
+
+		_ball.updatePosition(deltaNanoTime);
+
 		return GameState.ACTIVE;
 	}
 
+    /**
+     * Check if the ball is colliding with an animal tile
+     * @param deltaNanoTime a change in time
+     */
     public void tileCollisions (long deltaNanoTime) {
-        final double[] nextBall = ball.getNextPosition(deltaNanoTime);
+        final double[] nextBall = _ball.getNextPosition(deltaNanoTime);
         final double nextBallX = nextBall[0];
         final double nextBallY = nextBall[1];
 
-        for (int i = 0; i < tiles.size(); i++) {
-            Tile tile = tiles.get(i);
+        for (int i = 0; i < _tiles.size(); i++) {
+            Tile tile = _tiles.get(i);
 
             if (tile.contains(nextBallX, nextBallY)) {
-                ball.vx = ball.vx * 1.1;
-                ball.vy = ball.vy * 1.1; 
+                _ball.vx = _ball.vx * 1.1;
+                _ball.vy = _ball.vy * 1.1; 
                 getChildren().remove(tile.getImageView());
-                tiles.remove(i);
+                _tiles.remove(i);
                 return;
             }
         }
     }
 
-    public void wallCollisions (Long deltaNanoTime) {
+    /**
+     * Check if the ball is colliding with a wall and change its direction
+     */
+    public void wallCollisions () {
     
         // Check for collision on right wall
-        if (ball.x + ball.BALL_RADIUS > WIDTH) {
-            ball.vx = -1 *Math.abs(ball.vx);
+        if (_ball.x + _ball.BALL_RADIUS > WIDTH) {
+            _ball.vx = -1 *Math.abs(_ball.vx);
             return;
         }
         // Check for collision on left wall
-        else if (ball.x - ball.BALL_RADIUS < 0) {
-            ball.vx = Math.abs(ball.vx);
+        else if (_ball.x - _ball.BALL_RADIUS < 0) {
+            _ball.vx = Math.abs(_ball.vx);
             return;
         }
         
         // Check for collision on top wall
-        if (ball.y + ball.BALL_RADIUS > HEIGHT) {
-            ball.vy = -1 * Math.abs(ball.vy);
-            bottomCollisions++;
+        if (_ball.y + _ball.BALL_RADIUS > HEIGHT) {
+            _ball.vy = -1 * Math.abs(_ball.vy);
+            _bottomCollisions++;
             return;
         }
         // Check for collision bottom wall
-        else if (ball.y - ball.BALL_RADIUS < 0) {
-            ball.vy = Math.abs(ball.vy);
+        else if (_ball.y - _ball.BALL_RADIUS < 0) {
+            _ball.vy = Math.abs(_ball.vy);
             return;
         }
     }
 
+    /**
+     * Check if the ball will collide with the paddle and redirect it's path
+     */
     public void paddleCollisions(long deltaNanoTime) {
-        final double currentBallX = ball.x;
-        final double currentBallY = ball.y;
-        final double[] nextBall = ball.getNextPosition(deltaNanoTime);
+        final double currentBallX = _ball.x;
+        final double currentBallY = _ball.y;
+        final double[] nextBall = _ball.getNextPosition(deltaNanoTime);
         final double nextBallX = nextBall[0];
         final double nextBallY = nextBall[1];
 
-        if (ball.vy > 0) {
-            if (doesIntersect(currentBallX, currentBallY + ball.BALL_RADIUS,
-                        nextBallX, nextBallY + ball.BALL_RADIUS,
-                        paddle.getLeft(), paddle.getTop(), paddle.getRight(), paddle.getTop())) {
-                ball.vy = -1 * Math.abs(ball.vy);
+        // Check top side of paddle (ball is moving down)
+        if (_ball.vy > 0) {
+            if (doesIntersect(currentBallX, currentBallY + _ball.BALL_RADIUS,
+                        nextBallX, nextBallY + _ball.BALL_RADIUS,
+                        _paddle.getLeft(), _paddle.getTop(), _paddle.getRight(), _paddle.getTop())) {
+                _ball.vy = -1 * Math.abs(_ball.vy);
             }
         }
+        // Check bottom side of paddle (ball is moving up)
         else {
-            if (doesIntersect(currentBallX, currentBallY - ball.BALL_RADIUS,
-                        nextBallX, nextBallY - ball.BALL_RADIUS,
-                        paddle.getLeft(), paddle.getBottom(), paddle.getRight(), paddle.getBottom())) {
-                ball.vy = Math.abs(ball.vy);
+            if (doesIntersect(currentBallX, currentBallY - _ball.BALL_RADIUS,
+                        nextBallX, nextBallY - _ball.BALL_RADIUS,
+                        _paddle.getLeft(), _paddle.getBottom(), _paddle.getRight(), _paddle.getBottom())) {
+                _ball.vy = Math.abs(_ball.vy);
             }
         }
     }
+    
     /**
      * Checks for a collision between two line segments. Uses the orientation
      * of 3 points on a line to determine if the lines intersect. Can ignore
