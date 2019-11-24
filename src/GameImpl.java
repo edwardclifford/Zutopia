@@ -153,6 +153,7 @@ public class GameImpl extends Pane implements Game {
 		});
 
         tileCollisions(deltaNanoTime); 
+        wallCollisions(deltaNanoTime);
 
 		ball.updatePosition(deltaNanoTime);
 		return GameState.ACTIVE;
@@ -164,12 +165,15 @@ public class GameImpl extends Pane implements Game {
         final double[] nextBall = ball.getNextPosition(deltaNanoTime);
         final double nextBallX = nextBall[0];
         final double nextBallY = nextBall[1];
+        Tile removal;
 
         for (int i = 0; i < tiles.size(); i++) {
             Tile tile = tiles.get(i);
+            //https://www.geeksforgeeks.org/check-if-two-given-line-segments-intersect/
             // Check for left bounds
             if (ball.vx > 0) {
-                if (doesIntersect(currentBallX, currentBallY, nextBallX, nextBallY, 
+                if (doesIntersect(currentBallX + ball.BALL_RADIUS, currentBallY, 
+                        nextBallX + ball.BALL_RADIUS, nextBallY, 
                         tile.getLeft(), tile.getTop(), tile.getLeft(), tile.getBottom())) {
                             // Left edge collision, flip ball vx
                             System.out.println("Left col");
@@ -181,7 +185,8 @@ public class GameImpl extends Pane implements Game {
             }
             // Check for right bounds
             else {
-                if (doesIntersect(currentBallX, currentBallY, nextBallX, nextBallY, 
+                if (doesIntersect(currentBallX - ball.BALL_RADIUS, currentBallY, 
+                        nextBallX - ball.BALL_RADIUS, nextBallY, 
                         tile.getRight(), tile.getTop(), tile.getRight(), tile.getBottom())) {
                             // Right edge collision, flip ball vx
                             System.out.println("Right col");
@@ -193,7 +198,8 @@ public class GameImpl extends Pane implements Game {
             }
             // Check for top bounds
             if (ball.vy > 0) {
-                if (doesIntersect(currentBallX, currentBallY, nextBallX, nextBallY, 
+                if (doesIntersect(currentBallX, currentBallY + ball.BALL_RADIUS, 
+                        nextBallX, nextBallY + ball.BALL_RADIUS, 
                         tile.getRight(), tile.getTop(), tile.getLeft(), tile.getTop())) {
                             // Top edge collision, flip ball vy
                             System.out.println("Top col");
@@ -204,8 +210,9 @@ public class GameImpl extends Pane implements Game {
                 }
             }
             else {
-                if (doesIntersect(currentBallX, currentBallY, nextBallX, nextBallY, 
-                        tile.getRight(), tile.getBottom(), tile.getLeft(), tile.getBottom())) {
+                if (doesIntersect(currentBallX, currentBallY - ball.BALL_RADIUS,
+                        nextBallX, nextBallY - ball.BALL_RADIUS, 
+                        tile.getRight() + 1, tile.getBottom(), tile.getLeft() - 1, tile.getBottom())) {
                             // Bottom edge collision, flip ball vy
                             System.out.println("Bottom col");
                             ball.vy = -1 * ball.vy; 
@@ -214,6 +221,23 @@ public class GameImpl extends Pane implements Game {
                             return;
                 }
             }
+        }
+    }
+    
+    public void wallCollisions (Long deltaNanoTime) {
+    
+        if (ball.x + ball.BALL_RADIUS > WIDTH) {
+            ball.vx = -1 * ball.vx;
+        }
+        else if (ball.x - ball.BALL_RADIUS < 0) {
+            ball.vx = -1 * ball.vx;
+        }
+        
+        if (ball.y + ball.BALL_RADIUS > HEIGHT) {
+            ball.vy = -1 * ball.vy;
+        }
+        else if (ball.y - ball.BALL_RADIUS < 0) {
+            ball.vy = -1 * ball.vy;
         }
     }
 
